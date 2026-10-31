@@ -1,0 +1,87 @@
+---
+import Base from '../layouts/Base.astro';
+import RunLog from './RunLog.astro';
+import { getCollection } from 'astro:content';
+import { ui, routes, links, certs, upcoming, type Lang } from '../i18n';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const t = ui[lang];
+const r = routes[lang];
+const cases = (await getCollection('cases', (c) => c.data.lang === lang)).sort((a, b) => a.data.order - b.data.order);
+const altPath = lang === 'pt-br' ? routes.en.home : routes['pt-br'].home;
+---
+<Base lang={lang} title={`Ricardo Rosa · ${t.heroEyebrow}`} description={t.heroLead} altPath={altPath}>
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div>
+        <p class="eyebrow">{t.heroEyebrow}</p>
+        <h1>{t.heroTitle}</h1>
+        <p class="lead">{t.heroLead}</p>
+        <div class="ctas">
+          <a class="btn btn-primary" href="#casos">{t.heroCtaCases}</a>
+          <a class="btn btn-ghost" href="#contato">{t.heroCtaTalk}</a>
+        </div>
+      </div>
+      <RunLog lang={lang} />
+    </div>
+  </section>
+
+  <div class="wrap">
+    <div class="metrics">
+      {t.metrics.map((m) => <div class="metric"><strong>{m.value}</strong><span>{m.label}</span></div>)}
+    </div>
+  </div>
+
+  <section class="block" id="servicos">
+    <div class="wrap">
+      <h2>{t.servicesTitle}</h2>
+      <div class="services" style="margin-top:1.8rem">
+        {t.services.map((s) => <article><h3>{s.title}</h3><p>{s.body}</p></article>)}
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="casos">
+    <div class="wrap">
+      <h2>{t.casesTitle}</h2>
+      <p class="section-lead">{t.casesLead}</p>
+      <div class="cases">
+        {cases.map((c) => (
+          <a class="case-row stretch" href={`${r.cases}${c.data.caseId}/`}>
+            <span class="m">{c.data.metric}</span>
+            <div><h3>{c.data.title}</h3><p>{c.data.summary}</p></div>
+            <span class="status">{t.readCase} →</span>
+          </a>
+        ))}
+        {upcoming[lang].map((u) => (
+          <div class="case-row is-soon">
+            <span class="m" aria-hidden="true">—</span>
+            <div><h3>{u.title}</h3><p>{u.summary}</p></div>
+            <span class="status">{t.soon}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="certificacoes">
+    <div class="wrap">
+      <h2>{t.certsTitle}</h2>
+      <ul class="certs" style="margin-top:1.5rem">
+        {certs.map((c) => <li><b>{c.name}</b><span>{c.issuer}{c.year ? ` · ${c.year}` : ''}</span></li>)}
+      </ul>
+    </div>
+  </section>
+
+  <section class="block contact" id="contato">
+    <div class="wrap">
+      <h2>{t.contactTitle}</h2>
+      <p>{t.contactBody}</p>
+      <div class="ctas" style="margin-top:0">
+        <a class="btn btn-primary" href={links.linkedin} rel="noopener">{t.contactLinkedin}</a>
+        <a class="btn btn-ghost" href={links.github} rel="noopener">{t.contactGithub}</a>
+      </div>
+    </div>
+  </section>
+</Base>

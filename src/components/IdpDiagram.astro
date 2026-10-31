@@ -1,0 +1,58 @@
+---
+import type { Lang } from '../i18n';
+interface Props { lang: Lang }
+const pt = Astro.props.lang === 'pt-br';
+const L = pt
+  ? { req: 'Pedido', portal: 'Portal', orch: 'Orquestração', exec: 'Execução efêmera', infra: 'Infraestrutura', job1: 'Job 1 · provisionar', job2: 'Job 2 · configurar', state: 'state remoto', ip: 'IP via API', dns: 'DNS', notify: 'notificação', hv: 'hipervisor', cap: 'Fluxo ponta a ponta. Os executores vivem só durante o job; o state fica fora deles.' }
+  : { req: 'Request', portal: 'Portal', orch: 'Orchestration', exec: 'Ephemeral execution', infra: 'Infrastructure', job1: 'Job 1 · provision', job2: 'Job 2 · configure', state: 'remote state', ip: 'IP via API', dns: 'DNS', notify: 'notification', hv: 'hypervisor', cap: 'End-to-end flow. Executors only live for the duration of the job; state lives outside them.' };
+---
+<figure class="diagram">
+  <svg viewBox="0 0 900 300" role="img" aria-label={L.cap}>
+    <style>
+      .b { fill: var(--surface); stroke: var(--line); stroke-width: 1.5; }
+      .a { fill: var(--accent); }
+      .tx { fill: var(--ink); font: 600 14px var(--font-body); }
+      .sm { fill: var(--muted); font: 400 11px var(--font-mono); }
+      .w { fill: var(--accent-ink); font: 600 13px var(--font-body); }
+      .ln { stroke: var(--muted); stroke-width: 1.5; fill: none; marker-end: url(#arr); }
+      .dash { stroke-dasharray: 4 4; }
+    </style>
+    <defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="var(--muted)" /></marker></defs>
+
+    <text class="sm" x="20" y="28">{L.req}</text>
+    <rect class="b" x="20" y="40" width="140" height="64" rx="6" />
+    <text class="tx" x="36" y="68">Backstage</text><text class="sm" x="36" y="88">{L.portal}</text>
+
+    <text class="sm" x="200" y="28">{L.orch}</text>
+    <rect class="a" x="200" y="40" width="160" height="64" rx="6" />
+    <text class="w" x="216" y="68">AWX Workflow</text><text class="w" x="216" y="88" style="font-weight:400;font-size:11px">job templates</text>
+
+    <text class="sm" x="400" y="28">{L.exec}</text>
+    <rect class="b dash" x="400" y="40" width="210" height="64" rx="6" />
+    <text class="tx" x="416" y="68">{L.job1}</text><text class="sm" x="416" y="88">Terraform · bpg/proxmox</text>
+    <rect class="b dash" x="400" y="150" width="210" height="64" rx="6" />
+    <text class="tx" x="416" y="178">{L.job2}</text><text class="sm" x="416" y="198">Ansible · add_host · base</text>
+
+    <text class="sm" x="650" y="28">{L.infra}</text>
+    <rect class="b" x="650" y="40" width="230" height="64" rx="6" />
+    <text class="tx" x="666" y="68">Proxmox VE</text><text class="sm" x="666" y="88">{L.hv} · VM / LXC</text>
+    <rect class="b" x="650" y="150" width="105" height="64" rx="6" />
+    <text class="tx" x="664" y="178">{L.dns}</text><text class="sm" x="664" y="198">Technitium</text>
+    <rect class="b" x="775" y="150" width="105" height="64" rx="6" />
+    <text class="tx" x="789" y="178">Telegram</text><text class="sm" x="789" y="198">{L.notify}</text>
+
+    <rect class="b" x="400" y="240" width="210" height="44" rx="6" />
+    <text class="tx" x="416" y="267">HCP Terraform</text><text class="sm" x="520" y="267">{L.state}</text>
+
+    <path class="ln" d="M160 72 H196" />
+    <path class="ln" d="M360 72 H396" />
+    <path class="ln" d="M360 90 C380 90 380 182 396 182" />
+    <path class="ln" d="M610 72 H646" />
+    <path class="ln" d="M505 104 V146" />
+    <text class="sm" x="512" y="130">{L.ip}</text>
+    <path class="ln dash" d="M400 96 C372 140 372 262 396 262" />
+    <path class="ln" d="M610 182 H646" />
+    <path class="ln" d="M755 182 H771" />
+  </svg>
+  <figcaption>{L.cap}</figcaption>
+</figure>

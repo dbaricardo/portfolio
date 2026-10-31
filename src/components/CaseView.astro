@@ -1,0 +1,31 @@
+---
+import Base from '../layouts/Base.astro';
+import IdpDiagram from './IdpDiagram.astro';
+import { render, type CollectionEntry } from 'astro:content';
+import { ui, routes, type Lang } from '../i18n';
+
+interface Props { entry: CollectionEntry<'cases'>; altPath: string }
+const { entry, altPath } = Astro.props;
+const lang = entry.data.lang as Lang;
+const t = ui[lang];
+const { Content } = await render(entry);
+const diagrams: Record<string, typeof IdpDiagram> = { 'idp-self-service': IdpDiagram };
+const Diagram = diagrams[entry.data.caseId];
+---
+<Base lang={lang} title={`${entry.data.title} · Ricardo Rosa`} description={entry.data.summary} altPath={altPath}>
+  <header class="case-hero">
+    <div class="wrap">
+      <a href={`${routes[lang].home}#casos`}>{t.caseBack}</a>
+      <h1>{entry.data.title}</h1>
+      <p class="lead">{entry.data.summary}</p>
+      <dl class="case-meta">
+        <div><dt>{t.caseResult}</dt><dd class="big">{entry.data.metric}</dd><dd>{entry.data.metricLabel}</dd></div>
+        <div style="min-width:0"><dt>{t.caseStack}</dt><dd><ul class="chips">{entry.data.stack.map((s) => <li>{s}</li>)}</ul></dd></div>
+      </dl>
+      {Diagram && <Diagram lang={lang} />}
+    </div>
+  </header>
+  <article class="wrap">
+    <div class="prose"><Content /></div>
+  </article>
+</Base>

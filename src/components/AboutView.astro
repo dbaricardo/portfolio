@@ -1,0 +1,60 @@
+---
+import Base from '../layouts/Base.astro';
+import { ui, routes, links, certs, type Lang } from '../i18n';
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const t = ui[lang];
+const pt = lang === 'pt-br';
+const altPath = pt ? routes.en.about : routes['pt-br'].about;
+const career = pt
+  ? [
+      ['2024 – hoje', 'Engenheiro de plataforma sênior', 'Automação com Ansible Automation Platform e Terraform em ambiente financeiro de grande porte.'],
+      ['2024', 'Consultor de arquitetura cloud', 'Projetos de arquitetura em Azure para clientes corporativos.'],
+      ['2022 – 2024', 'Especialista de sistemas', 'Sustentação e automação de infraestrutura no varejo.'],
+      ['2021 – 2022', 'Analista cloud e DevOps', 'Pipelines, cloud pública e infraestrutura como código.'],
+      ['2015 – 2021', 'Suporte técnico → analista de infraestrutura', 'Servidores Windows e Linux, virtualização, monitoramento e rede.'],
+    ]
+  : [
+      ['2024 – now', 'Senior platform engineer', 'Automation with Ansible Automation Platform and Terraform in a large financial-sector environment.'],
+      ['2024', 'Cloud architecture consultant', 'Azure architecture projects for enterprise clients.'],
+      ['2022 – 2024', 'Systems specialist', 'Infrastructure operations and automation in retail.'],
+      ['2021 – 2022', 'Cloud and DevOps analyst', 'Pipelines, public cloud and infrastructure as code.'],
+      ['2015 – 2021', 'Technical support → infrastructure analyst', 'Windows and Linux servers, virtualization, monitoring and networking.'],
+    ];
+const intro = pt
+  ? [
+      'Trabalho com infraestrutura há 11 anos. Comecei no suporte técnico, passei por servidores, virtualização e cloud, e hoje trabalho como engenheiro de plataforma, com foco em automação usando Ansible e Terraform.',
+      'Fora do trabalho, mantenho um laboratório com cluster de virtualização, orquestrador de containers, portal self-service, observabilidade e agentes de IA. É onde testo ideias antes de recomendar para alguém. Os estudos de caso deste site saem dele.',
+      'Atendo como consultor times que querem sair do provisionamento por chamado: portal self-service, automação governada e infraestrutura como código.',
+    ]
+  : [
+      'I have worked in infrastructure for 11 years. I started in technical support, moved through servers, virtualization and cloud, and today I work as a platform engineer focused on automation with Ansible and Terraform.',
+      'Outside work, I run a lab with a virtualization cluster, a container orchestrator, a self-service portal, observability and AI agents. It is where I test ideas before recommending them to anyone. The case studies on this site come from it.',
+      'As a consultant, I work with teams that want to move away from ticket-driven provisioning: self-service portals, governed automation and infrastructure as code.',
+    ];
+---
+<Base lang={lang} title={`${t.aboutTitle} · Ricardo Rosa`} description={intro[0]} altPath={altPath}>
+  <header class="case-hero">
+    <div class="wrap">
+      <p class="eyebrow">{t.aboutTitle}</p>
+      <h1>Ricardo Rosa</h1>
+      <p class="lead">{pt ? 'Engenheiro de plataforma sênior · São Paulo, Brasil' : 'Senior platform engineer · São Paulo, Brazil'}</p>
+    </div>
+  </header>
+  <article class="wrap">
+    <div class="prose">
+      {intro.map((p) => <p>{p}</p>)}
+      <h2>{pt ? 'Trajetória' : 'Career'}</h2>
+      <table>
+        <tbody>
+          {career.map(([when, role, what]) => <tr><td style="white-space:nowrap">{when}</td><td><b>{role}</b><br />{what}</td></tr>)}
+        </tbody>
+      </table>
+      <h2>{t.certsTitle}</h2>
+      <ul>{certs.map((c) => <li>{c.name}</li>)}</ul>
+      <h2>{pt ? 'Formação' : 'Education'}</h2>
+      <p>{pt ? 'Tecnólogo em Análise e Desenvolvimento de Sistemas, FMU.' : 'Associate degree in Systems Analysis and Development, FMU.'}</p>
+      <p style="margin-top:2rem"><a class="btn btn-primary" href={links.linkedin} rel="noopener">{t.contactLinkedin}</a></p>
+    </div>
+  </article>
+</Base>

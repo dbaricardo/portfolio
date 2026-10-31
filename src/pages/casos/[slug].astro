@@ -1,0 +1,11 @@
+---
+import CaseView from '../../components/CaseView.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const entries = await getCollection('cases', (c) => c.data.lang === 'pt-br');
+  return entries.map((entry) => ({ params: { slug: entry.data.caseId }, props: { entry } }));
+}
+const { entry } = Astro.props;
+---
+<CaseView entry={entry} altPath={`/en/cases/${entry.data.caseId}/`} />

@@ -1,0 +1,64 @@
+---
+import '../styles/global.css';
+import { ui, routes, type Lang } from '../i18n';
+
+interface Props {
+  lang: Lang;
+  title: string;
+  description: string;
+  /** Caminho equivalente no outro idioma. */
+  altPath: string;
+}
+const { lang, title, description, altPath } = Astro.props;
+const t = ui[lang];
+const r = routes[lang];
+const otherLang: Lang = lang === 'pt-br' ? 'en' : 'pt-br';
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const alternate = new URL(altPath, Astro.site);
+---
+<!doctype html>
+<html lang={t.htmlLang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="alternate" hreflang={ui[lang].htmlLang} href={canonical} />
+    <link rel="alternate" hreflang={ui[otherLang].htmlLang} href={alternate} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonical} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=JetBrains+Mono:wght@400;500&family=Public+Sans:wght@400;600&display=swap"
+    />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="wrap">
+        <a class="brand" href={r.home}>Ricardo Rosa <span>devatech</span></a>
+        <nav class="nav" aria-label="Principal">
+          <a href={`${r.home}#casos`}>{t.navCases}</a>
+          <a href={`${r.home}#servicos`}>{t.navServices}</a>
+          <a href={r.about}>{t.navAbout}</a>
+          <a href={`${r.home}#contato`}>{t.navContact}</a>
+          <a class="lang" href={altPath} hreflang={ui[otherLang].htmlLang}>{t.switchLabel}</a>
+        </nav>
+      </div>
+    </header>
+    <main>
+      <slot />
+    </main>
+    <footer class="site-footer">
+      <div class="wrap">
+        <span>{t.footer}</span>
+        <span>devatech.kcompany.dev.br</span>
+      </div>
+    </footer>
+  </body>
+</html>

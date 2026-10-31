@@ -1,0 +1,38 @@
+---
+import { ui, type Lang } from '../i18n';
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const pt = lang === 'pt-br';
+// Linha do tempo medida no pipeline real (ver caso IDP self-service).
+const steps = pt
+  ? [
+      ['T+0s', 'formulário enviado no portal'],
+      ['T+5s', 'terraform init (state remoto)'],
+      ['T+20s', 'container criado com chave SSH'],
+      ['T+30s', 'IP descoberto via API, state salvo'],
+      ['T+60s', 'SSH disponível'],
+      ['T+90s', 'pacotes base + hostname'],
+      ['T+100s', 'registro DNS criado'],
+      ['T+108s', 'pronto · time notificado'],
+    ]
+  : [
+      ['T+0s', 'request form submitted in the portal'],
+      ['T+5s', 'terraform init (remote state)'],
+      ['T+20s', 'container created with SSH key'],
+      ['T+30s', 'IP discovered via API, state saved'],
+      ['T+60s', 'SSH reachable'],
+      ['T+90s', 'base packages + hostname'],
+      ['T+100s', 'DNS record created'],
+      ['T+108s', 'ready · team notified'],
+    ];
+---
+<div class="runlog" role="figure" aria-label={ui[lang].runTitle}>
+  <div class="runlog-head"><span>{ui[lang].runTitle}</span><span>status: successful</span></div>
+  <ol>
+    {steps.map(([t, label], i) => (
+      <li style={`--i:${i}`} class={i === steps.length - 1 ? 'done' : ''}>
+        <span class="t">{t}</span><span class="ok">✓</span><span>{label}</span>
+      </li>
+    ))}
+  </ol>
+</div>
