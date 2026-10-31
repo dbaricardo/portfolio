@@ -80,6 +80,7 @@ const altPath = lang === 'pt-br' ? routes.en.home : routes['pt-br'].home;
       <p>{t.contactBody}</p>
       <div class="ctas" style="margin-top:0">
         <a class="btn btn-primary" href={links.linkedin} rel="noopener">{t.contactLinkedin}</a>
+        <a class="btn btn-ghost" href={`mailto:${links.email}`}>{links.email}</a>
         <a class="btn btn-ghost" href={links.github} rel="noopener">{t.contactGithub}</a>
       </div>
     </div>

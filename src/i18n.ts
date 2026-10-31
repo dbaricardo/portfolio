@@ -113,6 +113,7 @@ export const ui = {
 export const links = {
   linkedin: 'https://www.linkedin.com/in/ricardo-rosa-4a20011a/',
   github: 'https://github.com/dbaricardo',
+  email: 'dbaricardor@gmail.com',
 };
 
 export const certs = [
