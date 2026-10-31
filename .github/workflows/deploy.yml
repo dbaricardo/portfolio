@@ -29,4 +29,6 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          # O primeiro deploy cria o projeto; nos seguintes o create falha e é ignorado.
+          preCommands: npx wrangler pages project create devatech-portfolio --production-branch=main || true
           command: pages deploy dist --project-name=devatech-portfolio --branch=main
